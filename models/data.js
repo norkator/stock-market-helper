@@ -5,11 +5,17 @@ module.exports = (sequelize, type) => {
       primaryKey: true,
       autoIncrement: true
     },
-    string_field: type.STRING,
 
-    number_field: {
+    id_notation: {
       type: type.INTEGER, defaultValue: 0
     },
+
+    data_date_time: {
+      type: type.DATE,
+      defaultValue: sequelize.fn('NOW')
+    },
+
+    data_value: type.DECIMAL(10,2),
 
     createdAt: {
       type: type.DATE,
