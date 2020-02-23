@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Funds">
+  <meta name="author" content="">
+  <!-- <link rel="icon" href=""> -->
+
+  <title>Funds O_o</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <!-- Custom styles for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+
+  <!-- Morris css -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+  <style>
+    h1, h2, h3, h4, h5, h6 {
+      font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    }
+
+    .display-4 {
+      font-size: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .display-4 {
+        font-size: 3rem;
+      }
+    }
+
+    .card-img-right {
+      height: 100%;
+      border-radius: 0 3px 3px 0;
+    }
+
+    .box-shadow {
+      box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    }
+
+    .footer {
+      padding: 2.5rem 0;
+      color: #999;
+      text-align: center;
+      background-color: #f9f9f9;
+      border-top: .05rem solid #e5e5e5;
+    }
+
+    .footer p:last-child {
+      margin-bottom: 0;
+    }
+
+    .zoom {
+      transition: transform .2s;
+      margin: 0 auto;
+    }
+
+    .zoom:hover {
+      transform: scale(1.5);
+    }
+  </style>
+
+</head>
+
+
+
+<div id="funds_chart" style="max-width: 100%; max-height: 100%;"></div>
+
+
+<body>
+
+
+
+<footer class="footer">
+  <p>Funds <a href="https://github.com/norkator/Index-Fund-Bot">Github</a>.</p>
+  <p>
+    <a href="#">Back to top</a>
+  </p>
+</footer>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- Morris chart -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"
+        integrity="sha256-0rg2VtfJo3VUij/UY9X0HJP7NET6tgAY98aMOfwP0P8=" crossorigin="anonymous"></script>
+
+<!-- Adds zooming effect -->
+<script src="https://cdn.jsdelivr.net/npm/wheelzoom@4.0.1/wheelzoom.js"
+        integrity="sha256-fhru0y6L8Knyrjj57vB7/npV5IUyq6Tvo8g0qoceVwQ=" crossorigin="anonymous"></script>
+
+<script>
+  $(document).ready(function () {
+
+    // Api url
+    const apiUrl = window.location.href;
+
+    $.ajax({
+      url: apiUrl + 'get/funds/chart',
+      type: 'GET',
+    }).done(function (data) {
+      $('#funds_chart').empty();
+      new Morris.Line({ // Area
+        element: 'funds_chart',
+        data: data.funds.data,
+        xkey: data.funds.xkey,
+        ykeys: data.funds.ykeys,
+        labels: data.funds.labels,
+        resize: true,
+        parseTime: false,
+        hideHover: true,
+        ymax: 280,
+        ymin: 120,
+      }).on('click', function (i, row) {
+      });
+
+    });
+
+  });
+</script>
+
+</body>
+</html>

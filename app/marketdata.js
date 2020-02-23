@@ -24,10 +24,13 @@ exports.GetLatestData = function (sequelizeObjects) {
     GetApiKey(url).then(apiKey => {
       console.log(apiKey);
       GetMarketData(apiKey, ['52545233', '52470546', '52545231', '52470536', '199092937']).then(data => {
-
-        InsertData(sequelizeObjects, data);
-
+        InsertData(sequelizeObjects, data).then(() => {
+          resolve();
+        }).catch(() => {
+          reject();
+        });
       }).catch(() => {
+        reject();
       });
     }).catch(error => {
       console.log(error);
