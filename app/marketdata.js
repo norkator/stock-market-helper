@@ -12,6 +12,15 @@ async function asyncForEach(array, callback) {
 }
 
 
+const notations = [
+  {name: 'America', id:'52545233'},
+  {name: 'Asia', id:'52470546'},
+  {name: 'Europe', id:'52545231'},
+  {name: 'Northern Europe', id:'52470536'},
+  {name: 'Global', id:'199092937'},
+];
+
+
 /**
  * Whole process getting data from market data api
  * @param sequelizeObjects
@@ -23,7 +32,7 @@ exports.GetLatestData = function (sequelizeObjects) {
     const url = 'https://www.op.fi/henkiloasiakkaat/saastot-ja-sijoitukset/rahastot/kaikki-rahastot/op-aasia-indeksi/';
     GetApiKey(url).then(apiKey => {
       console.log(apiKey);
-      GetMarketData(apiKey, ['52545233', '52470546', '52545231', '52470536', '199092937']).then(data => {
+      GetMarketData(apiKey, notations).then(data => {
         InsertData(sequelizeObjects, data).then(() => {
           resolve();
         }).catch(() => {
@@ -89,7 +98,7 @@ function GetMarketData(apiKey, idNotations = []) {
     asyncForEach(idNotations, async (idNotation) => {
       const options = {
         url: 'https://marketdata.op.fi/portal2/charts/fundchartdata.php?timestamp=' + apiKey.timestamp +
-          '&pid=0&uid=588&challenge=' + apiKey.challenge + '&ID_NOTATION=' + idNotation + '&type=line',
+          '&pid=0&uid=588&challenge=' + apiKey.challenge + '&ID_NOTATION=' + idNotation.id + '&type=line',
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -124,13 +133,13 @@ function InsertData(sequelizeObjects, notationData_ = []) {
           'data_date_time',
         ],
         where: {
-          id_notation: notationData.notation,
+          id_notation: notationData.notation.id,
         },
         order: [
           ['data_date_time', 'desc']
         ]
       }).then(rows => {
-        let lastNotationDataDateTime = new moment('2020-01-01');
+        let lastNotationDataDateTime = new moment('2019-01-01');
         if (rows.length > 0) {
           lastNotationDataDateTime = new moment(rows[0].data_date_time);
         }
@@ -139,7 +148,8 @@ function InsertData(sequelizeObjects, notationData_ = []) {
           const dataPartDateTime = new moment(data[0]);
           if (dataPartDateTime > lastNotationDataDateTime) {
             bulkData.push({
-              id_notation: notationData.notation,
+              name_notation: notationData.notation.name,
+              id_notation: notationData.notation.id,
               data_date_time: dataPartDateTime,
               data_value: data[1]
             });

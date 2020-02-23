@@ -6,6 +6,8 @@ module.exports = (sequelize, type) => {
       autoIncrement: true
     },
 
+    name_notation: type.STRING,
+
     id_notation: {
       type: type.INTEGER, defaultValue: 0
     },
