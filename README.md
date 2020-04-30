@@ -1,6 +1,6 @@
-# Index-Fund-Bot
+# Stock-Market-Helper
 
-Index fund bot for monitoring and analysis. Gives decision data for further user actions.
+Stock-Market-Helper for monitoring and analysis. Gives decision data for further user actions.
 
 
 
